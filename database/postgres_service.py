@@ -36,20 +36,26 @@ class PostgresService:
             self.cursor = self.connection.cursor()
             self.cursor.execute("SELECT current_database();")
 
-            print(
-                "Connected Database :",
-                self.cursor.fetchone()[0]
-            )
-
+            print("Connected Database :", self.cursor.fetchone()[0])
             print("✅ PostgreSQL Connected")
+
+            return True
 
         except Exception as error:
             print(f"PostgreSQL Connection Error: {error}")
 
+            self.connection = None
+            self.cursor = None
+
+            return False
+        
     def create_tables(self):
         """
         Create required PostgreSQL tables.
         """
+        if self.cursor is None:
+            print("PostgreSQL unavailable. Skipping table creation.")
+            return
 
         try:
             print("Creating PostgreSQL Tables...")
@@ -94,6 +100,9 @@ class PostgresService:
         """
         Save one chat into PostgreSQL.
         """
+        if self.cursor is None:
+            print("PostgreSQL unavailable. Chat log not saved.")
+            return
 
         try:
 
