@@ -38,26 +38,40 @@ class MemoryService:
         f"Session Started : {self.session_id}"
     )
 
+    # def load_chat(
+    #         self,
+    #     session_id=None
+    # ):
+
+    #     """
+    #     Load conversation from MongoDB.
+
+    #     If session_id is None,
+    #     load the current session.
+    #     """
+
+    #     if session_id is None:
+
+    #         session_id = self.session_id
+
+    #     return mongo.load_messages(
+    #         session_id
+    #     )
     def load_chat(
-            self,
+        self,
         session_id=None
     ):
 
-        """
-        Load conversation from MongoDB.
-
-        If session_id is None,
-        load the current session.
-        """
-
         if session_id is None:
-
             session_id = self.session_id
 
-        return mongo.load_messages(
-            session_id
-        )
-# ------------------------------------------------------
+        messages = mongo.load_messages(session_id)
+
+        print(f"Loading session: {session_id}")
+        print(f"Messages loaded: {len(messages)}")
+
+        return messages
+    # ------------------------------------------------------
     def set_current_session(
         self,
         session_id: str
