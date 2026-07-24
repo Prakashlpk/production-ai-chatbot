@@ -153,7 +153,7 @@ with st.sidebar:
         f"**Streaming:** {'Enabled' if enable_streaming else 'Disabled'}"
     )
 
-    st.write("**Voice:** Ready")
+    st.write("**Voice:** Under_Development"
 
     st.write("**LLM:** Gemini Connected")
 
