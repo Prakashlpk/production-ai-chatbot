@@ -226,7 +226,7 @@ class MongoService:
                     }
 
                 )
-
+            print(f"Loaded {len(history)} messages from MongoDB.")
             return history
 
         except Exception as error:
