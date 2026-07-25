@@ -25,7 +25,346 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-    
+
+st.markdown("""
+<style>
+
+/* ==========================
+   IMPORT FONT
+========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+html, body, [class*="css"]{
+    font-family: 'Inter', sans-serif;
+}
+
+/* ==========================
+   MAIN BACKGROUND
+========================== */
+
+.stApp{
+
+    background:
+    linear-gradient(rgba(6,25,52,0.93),
+    rgba(6,25,52,0.93)),
+    url("https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80");
+
+    background-size: cover;
+
+    background-position: center;
+
+    background-attachment: fixed;
+
+}
+
+
+/* ==========================
+   SIDEBAR
+========================== */
+
+[data-testid="stSidebar"]{
+
+    background:#FFFFFF;
+
+    border-right:2px solid #D6E2F3;
+
+    box-shadow:4px 0px 20px rgba(0,0,0,0.08);
+
+}
+
+/* ==========================
+   SIDEBAR FONT
+========================== */
+
+[data-testid="stSidebar"] *{
+
+    font-family:'Manrope', sans-serif !important;
+
+}
+
+/* Sidebar headings */
+
+/* ==========================
+   SIDEBAR HEADINGS
+========================== */
+
+[data-testid="stSidebar"] h1{
+
+    color:#0B1F3A;
+
+    font-size:28px;
+
+    font-weight:800;
+
+}
+
+[data-testid="stSidebar"] h2{
+
+    color:#0B1F3A;
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+
+[data-testid="stSidebar"] h3{
+
+    color:#0B1F3A;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+
+    letter-spacing:0.8px;
+
+}
+
+
+/* ==========================
+   SIDEBAR TEXT
+========================== */
+
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span,
+[data-testid="stSidebar"] div{
+
+    color:#243B55;
+
+    font-family:'Manrope',sans-serif;
+
+    font-size:15px;
+
+    font-weight:600;
+}
+
+/* ==========================
+   SIDEBAR CARDS
+========================== */
+
+[data-testid="stSidebar"] .stSelectbox,
+[data-testid="stSidebar"] .stToggle,
+[data-testid="stSidebar"] .stFileUploader{
+
+    background:#FFFFFF;
+
+    border:1px solid #D9E2EF;
+
+    border-radius:16px;
+
+    padding:15px;
+
+    margin-bottom:18px;
+
+    box-shadow:0px 4px 12px rgba(0,0,0,0.05);
+
+}
+/* ==========================
+   MAIN TITLE
+========================== */
+
+
+h1{
+
+    color:#FFFFFF !important;
+
+    font-size:48px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    text-shadow:
+        0px 0px 8px rgba(255,255,255,0.25),
+        0px 0px 20px rgba(0,153,255,0.35);
+
+}
+
+/* ==========================
+   HEADINGS
+========================== */
+
+h2,h3,h4{
+
+    color:white;
+
+}
+
+/* ==========================
+   NORMAL TEXT
+========================== */
+
+p,
+li{
+
+    color:#F8FAFC;
+
+    font-size:18px;
+
+    line-height:1.8;
+
+}
+/* ==========================
+   CHAT INPUT
+========================== */
+
+.stChatInput{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:8px;
+
+}
+
+/* ==========================
+   INPUT BOX
+========================== */
+
+.stTextInput input{
+
+    background:white;
+
+    color:black;
+
+    border-radius:12px;
+
+}
+
+/* ==========================
+   BUTTONS
+========================== */
+/* ==========================
+   NORMAL BUTTONS
+========================== */
+
+/* ==========================
+   BUTTONS
+========================== */
+
+div.stButton > button{
+
+    background:#061934;
+
+    color:#FFFFFF !important;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-weight:600;
+
+}
+
+div.stButton > button *{
+
+    color:#FFFFFF !important;
+
+    fill:#FFFFFF !important;
+
+}
+
+div.stButton > button:hover{
+
+    background:#0A2A57;
+
+    color:#FFFFFF !important;
+
+}
+
+div.stButton > button:hover *{
+
+    color:#FFFFFF !important;
+
+}
+/* ==========================
+   CONTAINERS
+========================== */
+
+div[data-testid="stVerticalBlock"]{
+
+    border-radius:20px;
+
+}
+
+/* ==========================
+   FILE UPLOADER
+========================== */
+
+[data-testid="stFileUploader"]{
+
+    background:rgba(255,255,255,0.08);
+
+    border-radius:15px;
+
+    padding:15px;
+
+}
+
+/* Hide the duplicate Upload text */
+
+[data-testid="stFileUploader"] button p{
+
+    display:none !important;
+
+}
+[data-testid="stFileUploader"] button::after{
+
+    content:"Upload";
+
+    color:#061934;
+
+    font-weight:600;
+
+    font-size:15px;
+
+}
+
+/* Fix Upload Button */
+
+[data-testid="stFileUploader"] section button{
+
+    background:#FFFFFF !important;
+
+    color:#061934 !important;
+
+    border:1px solid #D6E2F3 !important;
+
+    border-radius:10px !important;
+
+    font-size:15px !important;
+
+    font-weight:600 !important;
+
+    padding:8px 18px !important;
+
+    width:auto !important;
+
+}
+
+/* ==========================
+   CHAT MESSAGE
+========================== */
+
+[data-testid="stChatMessage"]{
+
+    background:rgba(255,255,255,0.08);
+
+    border-radius:18px;
+
+    padding:12px;
+
+    margin-bottom:10px;
+
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 
 if "mongo_connected" not in st.session_state:
@@ -83,9 +422,21 @@ with st.sidebar:
 
     st.subheader("📄 Upload Document")
 
+    st.markdown(
+        """
+        <style>
+        [data-testid="stFileUploader"] button {
+            display: none;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     uploaded_file = st.file_uploader(
         "Choose a file",
-        type=["pdf", "txt", "docx"]
+        type=["pdf", "txt", "docx"],
+        label_visibility="collapsed"
     )
     document_text = ""
 
@@ -199,9 +550,9 @@ with st.sidebar:
 
 st.title("🤖 Production AI Chatbot")
 
-st.caption(
-    "AI/ML Hiring Assignment"
-)
+# st.caption(
+#     "AI/ML Hiring Assignment"
+# )
 
 st.divider()
 
@@ -220,7 +571,7 @@ This chatbot is designed with a production-oriented architecture.
 Current capabilities:
 
 - 💬 Text Chat
-- 🎤 Voice Input (Coming Next)
+- 🎤 Voice Input
 - 📄 Document Upload
 - 🧠 Conversation Memory
 - 🛡️ Guardrails
