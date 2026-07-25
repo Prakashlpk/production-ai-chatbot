@@ -280,11 +280,7 @@ class MongoService:
             return []
     # ------------------------------------------------------
 
-    def get_recent_sessions(self):
-
-        """
-        Return all conversation sessions.
-        """
+    def get_recent_sessions(self, limit=10):
 
         if self.database is None:
             print("MongoDB unavailable. Returning empty sessions.")
@@ -294,31 +290,17 @@ class MongoService:
 
             collection = self.database["sessions"]
 
-            sessions = collection.find().sort(
+            sessions = list(
 
-                "last_updated",
+                collection.find()
 
-                -1
+                .sort("created_at", -1)
+
+                .limit(limit)
 
             )
 
-            recent = []
-
-            for session in sessions:
-
-                recent.append(
-
-                    {
-
-                        "session_id": session["session_id"],
-
-                        "title": session["title"]
-
-                    }
-
-                )
-
-            return recent
+            return sessions
 
         except Exception as error:
 
@@ -328,12 +310,12 @@ class MongoService:
     # ------------------------------------------------------
 
     def clear_session(
-        self,
-        session_id: str
-    ):
+    self,
+    session_id: str
+):
 
         """
-        Delete all messages belonging to one session.
+        Delete one conversation and its messages.
         """
 
         if self.database is None:
@@ -342,17 +324,21 @@ class MongoService:
 
         try:
 
-            collection = self.database["chat_history"]
-
-            collection.delete_many(
-
+            # Delete all messages
+            self.database["chat_history"].delete_many(
                 {
-
                     "session_id": session_id
-
                 }
-
             )
+
+            # Delete the session title
+            self.database["sessions"].delete_one(
+                {
+                    "session_id": session_id
+                }
+            )
+
+            print(f"Session deleted: {session_id}")
 
         except Exception as error:
 
