@@ -18,6 +18,12 @@ print("Whisper Loaded")
 
 def speech_to_text(audio_path):
 
-    result = speech_pipeline(audio_path)
+    result = speech_pipeline(
+        audio_path,
+        generate_kwargs={
+            "language": "english",
+            "task": "transcribe"
+        }
+    )
 
     return result["text"]
