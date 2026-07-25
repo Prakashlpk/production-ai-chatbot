@@ -22,13 +22,28 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
+    
+
 
 if "mongo_connected" not in st.session_state:
 
     mongo.connect()
     postgres.connect()
-    postgres.create_tables()
+    postgres.create_tables()    
     st.session_state.mongo_connected = True
+
+# if "mongo_connected" not in st.session_state:
+
+#     mongo_status = mongo.connect()
+
+#     print(f"Mongo Connect Status: {mongo_status}")
+
+#     st.write(f"Mongo Connect Status: {mongo_status}")  # Temporary
+
+#     postgres.connect()
+#     postgres.create_tables()
+
+#     st.session_state.mongo_connected = mongo_status    
 
 # ==========================================================
 # SESSION STATE
@@ -117,24 +132,40 @@ with st.sidebar:
 
         for session in recent_sessions:
 
-            if st.button(
-                session["title"],
-                key=session["session_id"],
-                use_container_width=True
-            ):
+            col1, col2 = st.columns([8, 1])
 
-                # Switch to the selected session
-                memory.set_current_session(
-                    session["session_id"]
-                )
+            with col1:
 
-                # Load the selected conversation into the UI
-                st.session_state.messages = memory.load_chat(
-                    session["session_id"]
-                )
+                if st.button(
+                    session["title"],
+                    key=f"open_{session['session_id']}",
+                    use_container_width=True
+                ):
 
-                # Refresh the page
-                st.rerun()
+                    # Switch to the selected session
+                    memory.set_current_session(
+                        session["session_id"]
+                    )
+
+                    # Load the selected conversation into the UI
+                    st.session_state.messages = memory.load_chat(
+                        session["session_id"]
+                    )
+
+                    st.rerun()
+
+            with col2:
+
+                if st.button(
+                    "🗑",
+                    key=f"delete_{session['session_id']}"
+                ):
+
+                    memory.clear_session(
+                        session["session_id"]
+                    )
+
+                    st.rerun()
 
     else:
 
