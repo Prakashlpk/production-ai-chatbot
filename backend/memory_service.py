@@ -168,13 +168,29 @@ class MemoryService:
         return mongo.get_recent_sessions()
 
 
+    def clear_session(
+        self,
+        session_id: str
+    ):
+
+        """
+        Delete one conversation from MongoDB.
+        """
+
+        mongo.clear_session(session_id)
 
 
-    
     def get_recent_history(
         self,
         max_messages: int = 10
     ):
+
+    
+
+
+
+    
+    
 
         """
         Return only the recent messages.
