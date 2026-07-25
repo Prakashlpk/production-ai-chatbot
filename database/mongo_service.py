@@ -49,12 +49,50 @@ class MongoService:
 
     # ------------------------------------------------------
 
+    # def connect(self):
+    #     """
+    #     Connect to MongoDB.
+    #     """
+    #     if not MONGODB_URI:
+    #         print("MONGODB_URI is missing.")
+    #         return False
+
+    #     try:
+
+    #         self.client = MongoClient(
+    #             MONGODB_URI,
+    #             serverSelectionTimeoutMS=5000
+    #         )
+
+    #         # Force a connection attempt
+    #         self.client.admin.command("ping")
+
+    #         self.database = self.client[
+    #             DATABASE_NAME
+    #         ]
+
+    #         print("✅ MongoDB Connected")
+
+    #         return True
+
+    #     except Exception as error:
+
+    #         print(f"MongoDB Connection Error: {error}")
+
+    #         self.client = None
+    #         self.database = None
+
+    #         return False
+
     def connect(self):
         """
         Connect to MongoDB.
         """
+
+        print("Attempting MongoDB connection...")
+
         if not MONGODB_URI:
-            print("MONGODB_URI is missing.")
+            print("❌ MONGODB_URI is missing.")
             return False
 
         try:
@@ -64,25 +102,31 @@ class MongoService:
                 serverSelectionTimeoutMS=5000
             )
 
-            # Force a connection attempt
+            print("Pinging MongoDB...")
+
             self.client.admin.command("ping")
 
-            self.database = self.client[
-                DATABASE_NAME
-            ]
+            self.database = self.client[DATABASE_NAME]
 
             print("✅ MongoDB Connected")
+            print(f"Database: {DATABASE_NAME}")
 
             return True
 
-        except Exception as error:
+        except Exception:
 
-            print(f"MongoDB Connection Error: {error}")
+            import traceback
+
+            print("❌ MongoDB Connection Failed")
+
+            traceback.print_exc()
 
             self.client = None
             self.database = None
 
             return False
+
+
         # ------------------------------------------------------
         # ------------------------------------------------------
 
