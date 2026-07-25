@@ -7,7 +7,10 @@ from streamlit_mic_recorder import mic_recorder
 # from backend.speech_service import speech_to_text
 from backend.document_service import document_service
 print(type(postgres))
-
+import tempfile
+import os
+import hashlib
+from backend.speech_service import speech_to_text
 
 
 print(dir(postgres))
@@ -184,7 +187,7 @@ with st.sidebar:
         f"**Streaming:** {'Enabled' if enable_streaming else 'Disabled'}"
     )
 
-    st.write("**Voice:** Under_Development")
+    st.write("**Voice:** Ready")
 
     st.write("**LLM:** Gemini Connected")
 
@@ -243,19 +246,74 @@ for message in st.session_state.messages:
 # INPUT SECTION
 # ==========================================================
 
+if "last_audio_hash" not in st.session_state:
+    st.session_state.last_audio_hash = None
+
+user_input = None
+
 col1, col2 = st.columns([1,8])
 
 with col1:
 
     audio = mic_recorder(
-        start_prompt="🎤 Start Recording",
-        stop_prompt="⏹ Stop Recording",
-        key="voice"
+    start_prompt="🎤",
+    stop_prompt="⏹",
+    key="voice"
 )
     if audio:
-        pass
+        
 
-        # with open("voice.wav", "wb") as f:
+        if audio:
+
+            current_audio_hash = hashlib.md5(
+                audio["bytes"]
+            ).hexdigest()
+
+            if current_audio_hash != st.session_state.last_audio_hash:
+
+                st.session_state.last_audio_hash = current_audio_hash
+
+                try:
+
+                    with tempfile.NamedTemporaryFile(
+                        delete=False,
+                        suffix=".webm"
+                    ) as temp_audio:
+
+                        temp_audio.write(audio["bytes"])
+
+                        temp_audio_path = temp_audio.name
+
+                    with st.spinner("Listening..."):
+
+                        recognized_text = speech_to_text(
+                            temp_audio_path
+                        )
+
+                    os.remove(temp_audio_path)
+
+                    if recognized_text and recognized_text.strip():
+
+                        user_input = recognized_text.strip()
+
+                    else:
+
+                        st.warning("Couldn't understand the audio.")
+
+
+
+                except Exception as error:
+
+                    st.error(
+                        f"Speech Recognition Error: {error}"
+                    )
+
+                finally:
+
+                    if os.path.exists(temp_audio_path):
+                        os.remove(temp_audio_path)    
+
+                # with open("voice.wav", "wb") as f:
 
         #     f.write(audio["bytes"])
 
@@ -265,10 +323,13 @@ with col1:
 
 with col2:
 
-    user_input = st.chat_input(
+    typed_input = st.chat_input(
         "Ask me anything..."
     )
 
+if typed_input:
+
+    user_input = typed_input
 # If voice input is available, use it as the chatbot input
 # if "voice_input" in locals() and voice_input:
 
